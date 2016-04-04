@@ -1,0 +1,105 @@
+/*
+ *  Copyright 2016 Adobe Systems Incorporated. All rights reserved.
+ *  This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License. You may obtain a copy
+ *  of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ *  OF ANY KIND, either express or implied. See the License for the specific language
+ *  governing permissions and limitations under the License.
+ */
+
+html {
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  font-size: 13px;
+  line-height: 20px;
+}
+
+[class^="mi-"], [class*=" mi-"] {
+    font-family: 'Material Icons';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.mi-help-outline:before {
+    content: "\e8fd";
+}
+
+.mi-add-box:before {
+    content: "\e146";
+}
+
+.mi-more-vert:before {
+    content: "\e5d4";
+}
+
+.mi-delete-forever:before {
+    content: "\e92b";
+}
+
+.mi-content-copy:before {
+    content: "\e14d";
+}
+
+.mi-save:before {
+    content: "\e161";
+}
+
+.ff-delete-set {
+    margin-top: 10px;
+}
+
+.ff-close-btn {
+    background-color: white;
+    margin-left: 0.3em;
+    margin-bottom: 0.2em;
+}
+
+.ff-alias {
+    margin: 5px 10px 5px 0;
+    display: inline-block;
+}
+
+.ff-feature {
+    width: 260px;
+    margin: 5px 10px 5px 0;
+    padding: 10px;
+    display: inline-block;
+}
+
+.ff-feature-name {
+    font-size: 16px;
+    text-align: center;
+    cursor: default;
+}
+
+.ff-pct-user-desc {
+    cursor: default;
+}
+
+.ff-paper {
+    margin: 12px;
+    padding: 8px 8px 8px 14px;
+}
+
+.ff-paper-title {
+    font-size: 19px;
+    color: rgba(0, 0, 0, 0.70);
+    margin-bottom: 10px;
+    cursor: default;
+}
+
+.ff-diff-middle {
+    background-color: lightgray;
+}
