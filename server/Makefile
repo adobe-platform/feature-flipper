@@ -21,12 +21,12 @@ zip_code: virtualenv
 
 upload_functions: zip_code
 	aws lambda update-function-code \
-	--region us-west-2 \
+	--region $$AWS_DEFAULT_REGION \
 	--function-name feature-flipper-public \
 	--zip-file fileb://$$PWD/public/lambda_function.zip
 
 	aws lambda update-function-code \
-	--region us-west-2 \
+	--region $$AWS_DEFAULT_REGION \
 	--function-name feature-flipper-private \
 	--zip-file fileb://$$PWD/private/lambda_function.zip
 
