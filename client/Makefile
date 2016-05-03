@@ -60,6 +60,8 @@ deploy: deploy_image
 	docker run -it --rm \
 	-e AWS_ACCESS_KEY_ID=$$AWS_ACCESS_KEY_ID \
 	-e AWS_SECRET_ACCESS_KEY=$$AWS_SECRET_ACCESS_KEY \
+	-e AWS_SESSION_TOKEN=$$AWS_SESSION_TOKEN \
+	-e AWS_SECURITY_TOKEN=$$AWS_SECURITY_TOKEN \
 	-e AWS_DEFAULT_REGION=$$AWS_DEFAULT_REGION \
 	-e S3_BUCKET=$$S3_BUCKET \
 	feature-flipper-deploy
@@ -68,6 +70,8 @@ enter_deploy_container: deploy_image
 	docker run -it --rm \
 	-e AWS_ACCESS_KEY_ID=$$AWS_ACCESS_KEY_ID \
 	-e AWS_SECRET_ACCESS_KEY=$$AWS_SECRET_ACCESS_KEY \
+	-e AWS_SESSION_TOKEN=$$AWS_SESSION_TOKEN \
+	-e AWS_SECURITY_TOKEN=$$AWS_SECURITY_TOKEN \
 	-e AWS_DEFAULT_REGION=$$AWS_DEFAULT_REGION \
 	-e S3_BUCKET=$$S3_BUCKET \
 	feature-flipper-deploy /bin/bash
