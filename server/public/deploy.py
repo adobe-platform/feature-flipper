@@ -49,6 +49,9 @@ def ensure_api():
         name='FeatureFlipper-public',
         description='Adobe Feature Flipper'
     )
+    if item == None:
+        item = restApi
+    
     print("created rest api", "rest api id", item['id'])
 
     return restApi['id']

@@ -7,5 +7,5 @@ deploy:
 	sleep 2 # don't hit rate limit
 	cd server && make deploy
 
-npm_install:
-	cd client && make npm_install
+node_modules:
+	cd client && make node_modules

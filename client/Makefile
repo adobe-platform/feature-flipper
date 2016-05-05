@@ -7,7 +7,7 @@
 #  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
 #  OF ANY KIND, either express or implied. See the License for the specific language
 #  governing permissions and limitations under the License.
-.PHONY: default dev_image npm_install grunt server enter_dev_container \
+.PHONY: default dev_image grunt server enter_dev_container \
 	deploy_image deploy enter_deploy_container
 
 default: grunt
@@ -19,7 +19,7 @@ default: grunt
 dev_image:
 	docker build -t feature-flipper-dev .
 
-npm_install: dev_image
+node_modules: dev_image
 	docker run -it --rm \
 	-v $$PWD:/usr/src/app \
 	-w /usr/src/app \

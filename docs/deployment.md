@@ -86,7 +86,7 @@ Setup your environment variables
 export S3_BUCKET=feature-flipper.yourdomain.com
 
 # for CORS
-export ACCESS_CONTROL_ALLOW_ORIGIN=$S3_BUCKET
+export ACCESS_CONTROL_ALLOW_ORIGIN=http://$S3_BUCKET
 ```
 
 Create the bucket and enable static site hosting
@@ -94,7 +94,7 @@ Create the bucket and enable static site hosting
 ```bash
 aws s3api create-bucket \
 --bucket $S3_BUCKET \
---grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
+--grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers \
 --create-bucket-configuration LocationConstraint=$AWS_DEFAULT_REGION
 
 aws s3api put-bucket-website \
@@ -243,8 +243,11 @@ rm delete_me*
 
 With the lambda functions created it's time to do the first deployment.
 
+If you did `cd server && make enter_deploy_container` above, exit the container
+now and `cd ..` to get back to the repo root.
+
 ```bash
-make npm_install deploy
+make node_modules deploy
 ```
 
 ### Create an API key
