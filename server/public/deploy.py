@@ -170,6 +170,8 @@ def create_route(restApiId, parentId, path, httpMethods):
             if statusCode == "200":
                 # default mapping
                 selectionPattern = ""
+            elif statusCode == "500":
+                selectionPattern = ".+"
             else:
                 selectionPattern = statusCode
 
