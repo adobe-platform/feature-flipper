@@ -229,4 +229,4 @@ def s404():
 
 
 def s500():
-    raise HTTPError()
+    raise HTTPError("500")
