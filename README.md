@@ -47,6 +47,16 @@ Feature sets have features.
 
 Features have a description and percentage of users that can see them.
 
+### Architecture
+
+#### Consuming server (public)
+
+![feature flipper public](feature-flipper-public.png)
+
+#### Admin interface (private)
+
+![feature flipper private](feature-flipper-private.png)
+
 ### Documentation
 
 - [Getting started and deployment](docs/deployment.md)
