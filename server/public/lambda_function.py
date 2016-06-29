@@ -207,7 +207,6 @@ def get_feature_set_data(setId):
         item = getDataRes['Item']
         if 'Data' in item and 'B' in item['Data']:
             featureData = msgpack.loads(item['Data']['B'])
-            print(featureData)
             return featureData
         else:
             return {}
