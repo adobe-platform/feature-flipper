@@ -1,15 +1,14 @@
 approve_by_comment: true
 approve_regex: '^(Approved|:shipit:|:\+1:)'
-always_pending:
-    title_regex: '(WIP|wip)'
-    labels:
-      - wip
-    explanation: 'This PR is a work in progress...'
 reject_regex: ^Rejected
+always_pending:
+  title_regex: '(WIP|wip)'
+  labels:
+    - wip
+  explanation: 'This PR is a work in progress...'
 reset_on_push: true
 reset_on_reopened: true
 reviewers:
-  name: owners
+  required: 1
   members:
   - phylake
-  required: 1
