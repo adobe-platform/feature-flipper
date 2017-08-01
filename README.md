@@ -57,6 +57,11 @@ Features have a description and percentage of users that can see them.
 
 ![feature flipper private](feature-flipper-private.png)
 
+#### Local cache
+
+Optional but highly recommended is using our [local cache](cache) to store
+feature data.
+
 ### Documentation
 
 - [Getting started and deployment](docs/deployment.md)

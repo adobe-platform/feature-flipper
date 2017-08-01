@@ -1,0 +1,52 @@
+{
+	"ImportPath": "github.com/adobe-platform/feature-flipper",
+	"GoVersion": "go1.6",
+	"GodepVersion": "v62",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/julienschmidt/httprouter",
+			"Comment": "v1.1",
+			"Rev": "8c199fb6259ffc1af525cc3ad52ee60ba8359669"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-colorable",
+			"Comment": "v0.0.3",
+			"Rev": "6dbf6132aecdd934a1013a23455c8cb1f67fa84f"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-isatty",
+			"Rev": "56b76bdf51f7708750eac80fa38b952bb9f32639"
+		},
+		{
+			"ImportPath": "github.com/pborman/uuid",
+			"Comment": "v1.0-11-gc55201b",
+			"Rev": "c55201b036063326c5b1b89ccfe45a184973d073"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "35ec611a141ee705590b9eb64d673f9e6dfeb1ac"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "b776ec39b3e54652e09028aaaaac9757f4f8211a"
+		},
+		{
+			"ImportPath": "gopkg.in/inconshreveable/log15.v2",
+			"Comment": "v2.11",
+			"Rev": "b105bd37f74e5d9dc7b6ad7806715c7a2b83fd3f"
+		},
+		{
+			"ImportPath": "gopkg.in/inconshreveable/log15.v2/stack",
+			"Comment": "v2.11",
+			"Rev": "b105bd37f74e5d9dc7b6ad7806715c7a2b83fd3f"
+		},
+		{
+			"ImportPath": "gopkg.in/inconshreveable/log15.v2/term",
+			"Comment": "v2.11",
+			"Rev": "b105bd37f74e5d9dc7b6ad7806715c7a2b83fd3f"
+		}
+	]
+}
