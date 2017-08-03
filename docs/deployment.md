@@ -56,10 +56,10 @@ a simple command that does quite a lot and includes:
 1. Creating an IAM role enabling Lambda functions to access DynamoDB tables
 1. Tearing down old API Gateway routes
 1. Creating new API routes. For each route
-  1. Configuring the method request
-  1. Configuring the integration request
-  1. Configuring the integration response
-  1. Configuring the method response
+    1. Configuring the method request
+    1. Configuring the integration request
+    1. Configuring the integration response
+    1. Configuring the method response
 1. Adding permissions in the lambda function so API Gateway can call it
 1. Creating a API Gateway deployment
 
