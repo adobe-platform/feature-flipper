@@ -1,12 +1,12 @@
-#  Copyright 2016 Adobe Systems Incorporated. All rights reserved.
-#  This file is licensed to you under the Apache License, Version 2.0 (the "License");
-#  you may not use this file except in compliance with the License. You may obtain a copy
-#  of the License at http://www.apache.org/licenses/LICENSE-2.0
+# (c) 2016-2017 Adobe.  All rights reserved.
+# This file is licensed to you under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License. You may obtain a copy
+# of the License at http://www.apache.org/licenses/LICENSE-2.0
 #
-#  Unless required by applicable law or agreed to in writing, software distributed under
-#  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-#  OF ANY KIND, either express or implied. See the License for the specific language
-#  governing permissions and limitations under the License.
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+# OF ANY KIND, either express or implied. See the License for the specific language
+# governing permissions and limitations under the License.
 import boto3
 import os
 import time
@@ -38,9 +38,11 @@ def deploy():
     ensure_resources(restApiId)
     ensure_lambda_permission(restApiId)
     do_deployment(restApiId)
+    ensure_api_key_and_usage_plan(restApiId)
 
 
 def ensure_api():
+    item = None
     rest_apis = apigateway.get_rest_apis()
     for item in rest_apis['items']:
         if item['name'] == 'FeatureFlipper-private':
@@ -51,10 +53,10 @@ def ensure_api():
         name='FeatureFlipper-private',
         description='Adobe Feature Flipper'
     )
-    if item == None:
+    if item is None:
         item = restApi
 
-    print("created rest api", "rest api id", ress['id'])
+    print("created rest api", "rest api id", restApi['id'])
 
     return restApi['id']
 
@@ -312,6 +314,64 @@ def ensure_lambda_permission(restApiId):
             SourceArn=sourceArn
         )
 
+
+def ensure_api_key_and_usage_plan(restApiId):
+    apiKey = None
+    keys = apigateway.get_api_keys(
+        limit=1,
+        nameQuery='feature-flipper-admin',
+        includeValues=True,
+    )
+
+    for key in keys['items']:
+        if key['name'] == 'feature-flipper-admin':
+            apiKey = key
+            print('found existing api key')
+            break
+
+    if apiKey is None:
+        apiKey = apigateway.create_api_key(
+            name='feature-flipper-admin',
+            enabled=True,
+            generateDistinctId=True,
+        )
+        print('created api key feature-flipper-admin')
+
+    plan = None
+    for item in apigateway.get_usage_plans()['items']:
+        if item['name'] == 'feature-flipper':
+            plan = item
+            print('found existing usage plan')
+            break
+
+    if plan is None:
+        plan = apigateway.create_usage_plan(
+            name='feature-flipper',
+            apiStages=[
+                {
+                    'apiId': restApiId,
+                    'stage': 'prod',
+                },
+            ],
+        )
+        print('created usage plan')
+
+    try:
+        apigateway.get_usage_plan_key(
+            usagePlanId=plan['id'],
+            keyId=apiKey['id'],
+        )
+        print('found usage plan key')
+    except apigateway.exceptions.NotFoundException:
+        apigateway.create_usage_plan_key(
+            usagePlanId=plan['id'],
+            keyId=apiKey['id'],
+            keyType='API_KEY',
+        )
+        print('created usage plan key')
+
+    print('the API key to login to the admin UI is')
+    print(apiKey['value'])
 
 functionInfo = lambdaClient.get_function(FunctionName=FUNCTION_NAME)
 functionArn = functionInfo['Configuration']['FunctionArn']

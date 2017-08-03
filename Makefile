@@ -1,4 +1,4 @@
-.PHONY: default deploy
+.PHONY: default deploy node_modules
 
 default: deploy
 

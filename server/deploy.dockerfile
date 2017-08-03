@@ -4,6 +4,5 @@ RUN apt-get -y update
 RUN apt-get -y install zip
 RUN pip install boto3 awscli
 
-ADD . /
-
+COPY deploy.cmd /
 CMD /deploy.cmd

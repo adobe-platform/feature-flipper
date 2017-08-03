@@ -1,6 +1,6 @@
 .PHONY: default
 
-default: upload_functions
+default: deploy
 
 deploy_image:
 	docker build -t feature-flipper-server-deploy -f deploy.dockerfile .
@@ -18,6 +18,26 @@ zip_code: virtualenv
 
 	cd private && zip -9 lambda_function.zip lambda_function.py
 	cd virtualenv && zip -r9 ../private/lambda_function.zip ./*
+
+create_functions:
+	- echo '' > delete_me
+	- zip delete_me.zip delete_me
+
+	- aws lambda create-function \
+	--function-name feature-flipper-public \
+	--runtime python2.7 \
+	--role $$(python role_arn.py) \
+	--handler lambda_function.lambda_handler \
+	--zip-file fileb://delete_me.zip
+
+	- aws lambda create-function \
+	--function-name feature-flipper-private \
+	--runtime python2.7 \
+	--role $$(python role_arn.py) \
+	--handler lambda_function.lambda_handler \
+	--zip-file fileb://delete_me.zip
+
+	- rm delete_me*
 
 upload_functions: zip_code
 	aws lambda update-function-code \
@@ -41,6 +61,8 @@ deploy: virtualenv deploy_image
 	-e ACCESS_CONTROL_ALLOW_ORIGIN=$$ACCESS_CONTROL_ALLOW_ORIGIN \
 	-e S3_BUCKET=$$S3_BUCKET \
 	-e REQUIRE_API_KEY=$$REQUIRE_API_KEY \
+	-v $$PWD:/host \
+	-w /host \
 	feature-flipper-server-deploy
 
 # helpful target to debug deployment issues
@@ -55,4 +77,6 @@ enter_deploy_container: deploy_image
 	-e ACCESS_CONTROL_ALLOW_ORIGIN=$$ACCESS_CONTROL_ALLOW_ORIGIN \
 	-e S3_BUCKET=$$S3_BUCKET \
 	-e REQUIRE_API_KEY=$$REQUIRE_API_KEY \
+	-v $$PWD:/host \
+	-w /host \
 	feature-flipper-server-deploy /bin/bash
