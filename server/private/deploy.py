@@ -128,7 +128,7 @@ def create_route(restApiId, parentId, path, httpMethods):
     corsPathSupport(restApiId, resourceId)
 
     for httpMethod in httpMethods:
-        time.sleep(0.5)
+        time.sleep(1)
 
         print(
             'put_method',
@@ -167,7 +167,7 @@ def create_route(restApiId, parentId, path, httpMethods):
         # enable throwing exceptions with status codes to actually return the
         # status code. COME ON api gateway
         for statusCode in httpStatuses:
-            time.sleep(0.5)
+            time.sleep(1)
 
             statusCode = str(statusCode)
 

@@ -7,11 +7,7 @@ Dependencies
 ### AWS CLI
 
 A properly configured AWS CLI is required. If you don't have one locally you can
-set the needed environment variables as to [configure the CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-environment),
-then use the deployment container (which has the CLI installed) by typing from
-the repo root:
-
-`cd server && make enter_deploy_container`
+set the needed environment variables as to [configure the CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-environment).
 
 ### Docker
 
@@ -91,7 +87,6 @@ Create the bucket and enable static site hosting
 ```bash
 aws s3api create-bucket \
 --bucket $S3_BUCKET \
---grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers \
 --create-bucket-configuration LocationConstraint=$AWS_DEFAULT_REGION
 
 aws s3api put-bucket-website \
@@ -118,8 +113,7 @@ DNS propagation for aliases can take some time so continue to the next step.
 
 ### Deploy for the first time
 
-If you did `cd server && make enter_deploy_container` above, exit the container
-now and `cd ..` to get back to the repo root.
+From the repo root with a properly setup environment do the following:
 
 ```bash
 make node_modules deploy
