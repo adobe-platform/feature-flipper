@@ -12,6 +12,9 @@
 package api
 
 import (
+	"context"
+	"net/http"
+
 	"github.com/adobe-platform/feature-flipper/logger"
 	"github.com/adobe-platform/feature-flipper/middleware"
 	"github.com/julienschmidt/httprouter"
@@ -22,6 +25,7 @@ func NewRouter() *httprouter.Router {
 
 	middlewares := []func(middleware.Handle) middleware.Handle{}
 
+	createRoute(router.GET, "/health", healthHandler, middlewares...)
 	createRoute(router.GET, "/sets", FeatureSetsHandler, middlewares...)
 	createRoute(router.GET, "/set/:set_id/features", FeaturesForUserHandler, middlewares...)
 	createRoute(router.GET, "/set/:set_id/aliases", FeatureSetAliasesHandler, middlewares...)
@@ -42,4 +46,8 @@ func createRoute(method func(path string, handle httprouter.Handle),
 
 	routeHandle := middleware.Context(path, log, handler)
 	method(path, routeHandle)
+}
+
+func healthHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	// default is a 200 response
 }
