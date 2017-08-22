@@ -1,4 +1,4 @@
-.PHONY: default
+.PHONY: default deploy_image zip_code create_functions
 
 default: deploy
 
@@ -26,14 +26,14 @@ create_functions:
 	- aws lambda create-function \
 	--function-name feature-flipper-public \
 	--runtime python2.7 \
-	--role $$(python role_arn.py) \
+	--role $$(python lambda_role_arn.py) \
 	--handler lambda_function.lambda_handler \
 	--zip-file fileb://delete_me.zip
 
 	- aws lambda create-function \
 	--function-name feature-flipper-private \
 	--runtime python2.7 \
-	--role $$(python role_arn.py) \
+	--role $$(python lambda_role_arn.py) \
 	--handler lambda_function.lambda_handler \
 	--zip-file fileb://delete_me.zip
 
@@ -59,6 +59,7 @@ deploy: virtualenv deploy_image
 	-e AWS_SECURITY_TOKEN=$$AWS_SECURITY_TOKEN \
 	-e AWS_DEFAULT_REGION=$$AWS_DEFAULT_REGION \
 	-e ACCESS_CONTROL_ALLOW_ORIGIN=$$ACCESS_CONTROL_ALLOW_ORIGIN \
+	-e R53_DOMAIN=$$R53_DOMAIN \
 	-e S3_BUCKET=$$S3_BUCKET \
 	-e REQUIRE_API_KEY=$$REQUIRE_API_KEY \
 	-v $$PWD:/host \
@@ -75,6 +76,7 @@ enter_deploy_container: deploy_image
 	-e AWS_SECURITY_TOKEN=$$AWS_SECURITY_TOKEN \
 	-e AWS_DEFAULT_REGION=$$AWS_DEFAULT_REGION \
 	-e ACCESS_CONTROL_ALLOW_ORIGIN=$$ACCESS_CONTROL_ALLOW_ORIGIN \
+	-e R53_DOMAIN=$$R53_DOMAIN \
 	-e S3_BUCKET=$$S3_BUCKET \
 	-e REQUIRE_API_KEY=$$REQUIRE_API_KEY \
 	-v $$PWD:/host \

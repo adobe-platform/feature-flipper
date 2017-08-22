@@ -11,9 +11,12 @@ set the needed environment variables as to [configure the CLI](http://docs.aws.a
 
 ### Docker
 
-A working Docker installation is required.
+A working Docker installation is required. Docker is not a runtime requirement
+of the feature flipper and is only used to create a consistent deployment
+environment.
 
-A working Docker installation looks like this:
+A working Docker installation looks like this
+(note the use of `version`, not `--version`):
 
 ```
 [you:~]$ docker version
@@ -34,21 +37,18 @@ Server:
  OS/Arch:      linux/amd64
 ```
 
-One-time setup
---------------
+Idempotent deployment
+---------------------
 
-Deployment of the feature flipper requires some one-time manual setup to get
-running. This includes:
+The deployment scripts are idempotent. If you run into any issue while running
+`make` just run it again. Some of what the deployment script do includes:
 
-1. A S3 bucket with static site hosting turned on for the SPA
-1. A Route53 alias to the bucket
-
-After these resources are in place the remainder of the deployment is done with
-a simple command that does quite a lot and includes:
-
-1. Building and uploading the SPA to S3
-1. Uploading lambda function code
+1. Creating a S3 bucket with static site hosting
+1. Creating a Route53 alias to the bucket
+1. Building and uploading the Single Page App (SPA) to S3
 1. Creating DynamoDB tables for feature data
+1. Creating Autoscaling policies for DynamoDB tables
+1. Creating Lambda functions and uploading their code
 1. Creating an IAM role enabling Lambda functions to access DynamoDB tables
 1. Tearing down old API Gateway routes
 1. Creating new API routes. For each route
@@ -59,7 +59,10 @@ a simple command that does quite a lot and includes:
 1. Adding permissions in the lambda function so API Gateway can call it
 1. Creating a API Gateway deployment
 
-### Set your AWS credentials
+Configure your environment
+--------------------------
+
+### AWS creds
 
 ```bash
 export AWS_ACCESS_KEY_ID=<access key>
@@ -67,56 +70,17 @@ export AWS_SECRET_ACCESS_KEY=<secret>
 export AWS_DEFAULT_REGION=<your region>
 ```
 
-### Create a S3 bucket
-
-For static site hosting the bucket name matters. In this example we'll use
-`feature-flipper.yourdomain.com` throughout the initial setup and deployment.
-
-Setup your environment variables
+### Feature Flipper config
 
 ```bash
-# The bucket from which to serve the SPA
-export S3_BUCKET=feature-flipper.yourdomain.com
+# The Route53 domain. Make sure to remove the trailing .
+export R53_DOMAIN=yourdomain.com
+
+# The bucket from which to serve the SPA.
+export S3_BUCKET="feature-flipper.$R53_DOMAIN"
 
 # for CORS
-export ACCESS_CONTROL_ALLOW_ORIGIN=http://$S3_BUCKET
-```
-
-Create the bucket and enable static site hosting
-
-```bash
-aws s3api create-bucket \
---bucket $S3_BUCKET \
---create-bucket-configuration LocationConstraint=$AWS_DEFAULT_REGION
-
-aws s3api put-bucket-website \
---bucket $S3_BUCKET \
---website-configuration '{"IndexDocument":{"Suffix":"index.html"},"ErrorDocument":{"Key":"error.html"}}'
-```
-
-### Create a Route53 alias
-
-AWS doesn't expose an API to [get the HostedZoneID of a S3 bucket](https://forums.aws.amazon.com/thread.jspa?threadID=116724)
-meaning this step has to be done in the console.
-
-1. Go to the Route53 console
-1. Click on your domain `yourdomain.com.`
-1. Click "Create Record Set"
-1. Type "feature-flipper" in the "Name" field
-1. Leave "Type" as "A - IPv4 Address"
-1. Click the "Yes" radio button for "Alias"
-1. Click the "Alias Target" dropdown. Wait for S3 website endpoints to populate.
-1. Click the "feature-flipper.yourdomain.com" bucket
-1. Click "Create"
-
-DNS propagation for aliases can take some time so continue to the next step.
-
-### Deploy for the first time
-
-From the repo root with a properly setup environment do the following:
-
-```bash
-make node_modules deploy
+export ACCESS_CONTROL_ALLOW_ORIGIN="http://$S3_BUCKET"
 ```
 
 Deploying and upgrading an existing deployment
@@ -130,8 +94,8 @@ To deploy or update the feature flipper simply run this from the repo root:
 # key with the FeatureFlipper-public deployment stage
 # export REQUIRE_API_KEY=1
 
-# AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION, S3_BUCKET, and
-# ACCESS_CONTROL_ALLOW_ORIGIN should still be set
+# AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION, R53_DOMAIN,
+# S3_BUCKET, and ACCESS_CONTROL_ALLOW_ORIGIN should still be set
 
 make
 ```
@@ -142,8 +106,8 @@ Logging in
 To login to the SPA go to http://feature-flipper.yourdomain.com
 
 The frontend needs to know which API Gateway endpoint to talk to, and it needs
-and API key to authenticate. The API key was created above. Here's how to find
-the endpoint:
+and API key to authenticate. The API key was created above and printed out as
+the last output. Here's how to find the endpoint:
 
 The endpoint is found in the API Gateway console
 
@@ -152,4 +116,8 @@ The endpoint is found in the API Gateway console
 1. Click the "Resources" dropdown
 1. Click "Stages"
 1. Click "prod"
-1. Copy the "Invoke URL" and paste it into the login prompt at feature-flipper.yourdomain.com
+1. Copy the "Invoke URL" and paste it into the login prompt at
+   http://feature-flipper.yourdomain.com
+
+The FeatureFlipper-public invoke URL is what the [node-local cache](../cache)
+is configured with.
