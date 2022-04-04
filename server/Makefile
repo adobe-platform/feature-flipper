@@ -25,14 +25,14 @@ create_functions:
 
 	- aws lambda create-function \
 	--function-name feature-flipper-public \
-	--runtime python2.7 \
+	--runtime python3.9 \
 	--role $$(python lambda_role_arn.py) \
 	--handler lambda_function.lambda_handler \
 	--zip-file fileb://delete_me.zip
 
 	- aws lambda create-function \
 	--function-name feature-flipper-private \
-	--runtime python2.9 \
+	--runtime python3.9 \
 	--role $$(python lambda_role_arn.py) \
 	--handler lambda_function.lambda_handler \
 	--zip-file fileb://delete_me.zip
