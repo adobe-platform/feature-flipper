@@ -1,4 +1,4 @@
-FROM python:2.7.11
+FROM python:3.9.12
 
 ADD virtualenv.cmd /
 

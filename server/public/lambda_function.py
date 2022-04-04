@@ -25,10 +25,10 @@ DB_ALIAS_TABLE = 'FeatureFlipperAliases'
 def lambda_handler(req, context):
     try:
         return handle_request(req)
-    except HTTPError, e:
+    except HTTPError as e:
         traceback.print_exc()
         raise e
-    except Exception, e:
+    except Exception as e:
         traceback.print_exc()
         s500()
 
@@ -41,7 +41,7 @@ def handle_request(req):
     if 'resource_path' not in req:
         s400()
 
-    print(req['http_method'] + ' ' + req['resource_path'])
+    print('v2: ' + req['http_method'] + ' ' + req['resource_path'])
     if req['http_method'] == "GET":
 
         if req['resource_path'] == "/sets":
@@ -206,7 +206,8 @@ def get_feature_set_data(setId):
     if 'Item' in getDataRes:
         item = getDataRes['Item']
         if 'Data' in item and 'B' in item['Data']:
-            featureData = msgpack.loads(item['Data']['B'])
+            featureData = msgpack.loads(item['Data']['B'], encoding='utf-8')
+            print(featureData)
             return featureData
         else:
             return {}
